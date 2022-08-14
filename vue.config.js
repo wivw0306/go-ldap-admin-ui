@@ -29,7 +29,7 @@ module.exports = {
   assetsDir: 'static',
   // lintOnSave: process.env.NODE_ENV === 'development',//这个是设置eslint的代码规范，
   productionSourceMap: false,
-  lintOnSave: false,//解决eslint报错的问题
+  lintOnSave: false, // 解决eslint报错的问题
   devServer: {
     port: port,
     open: true,
