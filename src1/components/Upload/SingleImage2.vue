@@ -1,5 +1,5 @@
 <template>
-  <div class="upload-container">
+  <div class="singleImageUpload2 upload-container">
     <el-upload
       :data="dataObj"
       :multiple="false"
@@ -11,18 +11,10 @@
     >
       <i class="el-icon-upload" />
       <div class="el-upload__text">
-        将文件拖到此处，或<em>点击上传</em>
+        Drag或<em>点击上传</em>
       </div>
     </el-upload>
-    <div class="image-preview image-app-preview">
-      <div v-show="imageUrl.length>1" class="image-preview-wrapper">
-        <img :src="imageUrl">
-        <div class="image-preview-action">
-          <i class="el-icon-delete" @click="rmImage" />
-        </div>
-      </div>
-    </div>
-    <div class="image-preview">
+    <div v-show="imageUrl.length>0" class="image-preview">
       <div v-show="imageUrl.length>1" class="image-preview-wrapper">
         <img :src="imageUrl">
         <div class="image-preview-action">
@@ -37,7 +29,7 @@
 import { getToken } from '@/api/qiniu'
 
 export default {
-  name: 'SingleImageUpload3',
+  name: 'SingleImageUpload2',
   props: {
     value: {
       type: String,
@@ -62,8 +54,8 @@ export default {
     emitInput(val) {
       this.$emit('input', val)
     },
-    handleImageSuccess(file) {
-      this.emitInput(file.files.file)
+    handleImageSuccess() {
+      this.emitInput(this.tempUrl)
     },
     beforeUpload() {
       const _self = this
@@ -75,7 +67,7 @@ export default {
           _self._data.dataObj.key = key
           this.tempUrl = response.data.qiniu_url
           resolve(true)
-        }).catch(_ => {
+        }).catch(() => {
           reject(false)
         })
       })
@@ -85,22 +77,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/mixin.scss";
 .upload-container {
   width: 100%;
+  height: 100%;
   position: relative;
-  @include clearfix;
   .image-uploader {
-    width: 35%;
-    float: left;
+    height: 100%;
   }
   .image-preview {
-    width: 200px;
-    height: 200px;
-    position: relative;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
     border: 1px dashed #d9d9d9;
-    float: left;
-    margin-left: 50px;
     .image-preview-wrapper {
       position: relative;
       width: 100%;
@@ -134,22 +124,6 @@ export default {
       .image-preview-action {
         opacity: 1;
       }
-    }
-  }
-  .image-app-preview {
-    width: 320px;
-    height: 180px;
-    position: relative;
-    border: 1px dashed #d9d9d9;
-    float: left;
-    margin-left: 50px;
-    .app-fake-conver {
-      height: 44px;
-      position: absolute;
-      width: 100%; // background: rgba(0, 0, 0, .1);
-      text-align: center;
-      line-height: 64px;
-      color: #fff;
     }
   }
 }
