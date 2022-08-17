@@ -9,7 +9,7 @@ import getPageTitle from '@/utils/get-page-title'
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist 没有重定向白名单
-//路由守卫
+// 路由守卫
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
@@ -49,7 +49,7 @@ router.beforeEach(async(to, from, next) => {
           next({ ...to, replace: true })
         } catch (error) {
           // remove token and go to login page to re-login
-         
+
           await store.dispatch('user/resetToken')
           Message.error(error || 'Has Error')
           next(`/login?redirect=${to.path}`)
@@ -59,14 +59,14 @@ router.beforeEach(async(to, from, next) => {
     }
   } else {
     /* has no token*/
-   
+
     if (whiteList.indexOf(to.path) !== -1) {
-      //在免费登录白名单，直接去
+      // 在免费登录白名单，直接去
       next()
-    }else if(to.path === '/changePass'){
-      next({replace: true} )
+    } else if (to.path === '/changePass') {
+      next({ replace: true })
       // NProgress.done()
-    }else {
+    } else {
       // other pages that do not have permission to access are redirected to the login page.
       next(`/login?redirect=${to.path}`)
       NProgress.done()
